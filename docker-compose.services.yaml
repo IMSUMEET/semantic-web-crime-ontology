@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./frontend # Path to the frontend Dockerfile
+    ports:
+      - "8080:80" # Maps port 80 inside the container to 8080 on the host
+    environment:
+      - VITE_BACKEND=http://backend:3000
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend # Path to the backend Dockerfile
+    ports:
+      - "3000:3000" # Maps port 3000 inside the container to 3000 on the host
+    environment:
+      - NODE_ENV=production
+      - GRAPHDB_ENDPOINT=http://graphdb:7200/repositories
+    depends_on:
+      graphdb:
+        condition: service_healthy # Wait for GraphDB to be healthy
+    networks:
+      - app-network
+
+  graphdb:
+    image: ontotext/graphdb:10.6.4
+    container_name: graphdb
+    ports:
+      - "7200:7200" # Maps GraphDB's default port
+    volumes:
+      - ./data:/opt/graphdb/home/data # Persist data
+      - ./config:/config # Mount repository configuration
+      - ./data/rdf:/root/graphdb-import
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:7200/repositories/semantic-NYC-LA-Crime-Data/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+networks:
+  app-network:

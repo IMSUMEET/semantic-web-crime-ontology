@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  graphdb:
+    image: ontotext/graphdb:10.6.4
+    container_name: graphdb
+    ports:
+      - "7200:7200" # Maps GraphDB's default port
+    volumes:
+      - ./data:/opt/graphdb/home/data # Persist data
+      - ./config:/config # Mount repository configuration
+      - ./data/rdf:/root/graphdb-import
+    networks:
+      - app-network
+
+networks:
+  app-network:
