@@ -9,6 +9,7 @@ cd semantic-web-crime-ontology
 download data.zip file uploaded on canvas. Upload the data folder inside semantic-web-crime-ontology
 
 Make sure you have docker installed on the device (https://docs.docker.com/engine/install/)
+Run the docker deamon
 
 Run the following command to start the application
 
