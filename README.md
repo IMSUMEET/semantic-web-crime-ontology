@@ -15,9 +15,9 @@ Run the following command to start the application
 
 ### To start the application
 
-    ```bash
-    docker-compose -f docker-compose.services.yaml up
-    ```
+```bash
+docker-compose -f docker-compose.services.yaml up
+```
 
 ### Click below link to test the application
 
